@@ -5,19 +5,26 @@
 
 import optparse
 from socket import *
+from threading import *
 
-#noinspection PyBroadException
+
+screen_lock = Semaphore(value=1)
 def conn_scan(tgt_host, tgt_port):
     try:
         conn_skt = socket(AF_INET, SOCK_STREAM)
         conn_skt.connect((tgt_host, tgt_port))
-        conn_skt.send('TestPacket\r\n')
+        conn_skt.send('Knoch knock\r\n')
         results = conn_skt.recv(100)
+        screen_lock.acquire()
         print '[+] %d/tcp open' % tgt_port
         print '[+] ' + str(results)
         conn_skt.close()
     except:
+        screen_lock.acquire()
         print '[-] %d/tcp closed' % tgt_port
+    finally:
+        screen_lock.release()
+        conn_skt.close()
 
 
 def port_scan(tgt_host, tgt_ports):
@@ -33,8 +40,8 @@ def port_scan(tgt_host, tgt_ports):
         print '\n[+] Scan Results for: ' + tgt_ip
     setdefaulttimeout(1)
     for tgt_port in tgt_ports:
-        print 'Scanning port ' + tgt_port
-        conn_scan(tgt_host, int(tgt_port))
+        t = Thread(target=conn_scan(tgt_host, int(tgt_port)))
+        t.start()
 
 def main():
     parser = optparse.OptionParser('usage %prog -H ' +
