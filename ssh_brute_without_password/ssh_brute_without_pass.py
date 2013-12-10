@@ -1,5 +1,5 @@
 """
-To use this script properly you will need to google for debian_
+To use this script properly you will have to google for debian_
 ssh_dsa_1024_x86.tar.bz2 package.
 """
 
@@ -7,7 +7,6 @@ import pexpect
 import optparse
 import os
 from threading import *
-
 
 MAX_CONNECTIONS = 5
 connection_lock = BoundedSemaphore(MAX_CONNECTIONS)
